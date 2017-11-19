@@ -18,10 +18,8 @@ y0=zeros(1,sz(2));
 delta0=zeros(1,sz(2));
 ddes=zeros(1,sz(2));
 for i=1:sz(2)
-%     idxs=find(data(i).interp.mocap.velocity(1,:)>.5,1);
-%     idxe=find(data(i).interp.mocap.velocity(1,:)>.5,1,'last');
-    idxs=find(data(i).interp.time>t0,1);
-    idxe=find(data(i).interp.time>(t0+1.5),1);
+    idxs=find(data(i).interp.mocap.velocity(1,:)>.5,1);
+    idxe=find(data(i).interp.mocap.velocity(1,:)>.5,1,'last');
     rg=idxs:idxe;
     estdelta=atan(l*data(i).interp.mocap.angular_velocity(3,rg)./data(i).interp.mocap.velocity(1,rg));
      ddes=polyval(pr,data(i).interp.input.command.steering(rg));
@@ -35,18 +33,19 @@ end
 
 k=A\b
 
-for i=1:sz(2)
+for i=1
     estdelta=atan(l*data(i).interp.mocap.angular_velocity(3,:)./data(i).interp.mocap.velocity(1,:));
     ddes=polyval(pr,data(i).interp.input.command.steering);
     idxs=find(data(i).interp.time>t0,1);
-    idxe=find(data(i).interp.time>(t0+1.5),1);
-    tspan=data(i).interp.time(idxs:idxe);
-    y0= estdelta(idxs);
-    [~,y]=ode45(@(t,y)k*(zoh(tspan,ddes(idxs:idxe)',t)-y),tspan,y0);
-    
+    idxe=find(data(i).interp.time>(t0+1),1);
+    t=data(i).interp.time(idxs):0.01:data(i).interp.time(idxe);
+    y0=ddes(idxs)-estdelta(idxs);
+    sys=ss(-k,k,0,0);
+    y=lsim(sys,zoh(data(i).interp.time(idxs:idxe),ddes(idxs:idxe)',t),t');
+    modeldelta=y'+interp1(data(i).interp.time(idxs:idxe),estdelta(idxs:idxe),t)';
     figure(1)
     hold on
-    plot(tspan-0.15,y','b','LineWidth',2)
+    plot(t,modeldelta,'b','Li)
     plot(data(i).interp.time,estdelta,'k.')
     plot(data(i).interp.time,ddes,'r')
 end
