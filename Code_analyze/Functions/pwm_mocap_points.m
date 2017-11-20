@@ -1,41 +1,53 @@
-function [P_out,vx_out,ax_out,vy_out,w_out,Pst_out] = pwm_mocap_points(data,tnums,threshold,pl,Pth,vx,ax,vy,w,Pst)
-%input:structure of data 
-%trialnums: numbers in data structure to use
-%threshold: minimum velocity for data points
-%pl 1 if you want to plot data
-%output ax: acceleration, vx: velocity, P: throttle channel in colum
-%vectors
-ax_out=ax;
-P_out=Pth;
-Pst_out=Pst;
-vx_out=vx;
-vy_out=vy;
-w_out=w;
-for i=1:length(tnums)
+function [u0,vx,ax,vy,w,delta,delta_dot,t] = pwm_mocap_points(data,Pveh,velocity_threshold,throttle_threshold,inputplot)
+%input:
+%data:struture with trials to use
+%Pveh: vehicle paramters Pveh=[m,Iz,l,lr];
+%velocity_threshold: [minimum velocity, maximum velocity]
+%command_threshold: [minimum command, maximum command]
 
-idxs=find(data(tnums(i)).interp.mocap.speed>=threshold,1);
-idxe=find(data(tnums(i)).interp.mocap.speed>=threshold,1,'last');
+u0=[];
+vx=[];
+ax=[];
+vy=[];
+w=[];
+delta=[];
+u1=[];
+delta_dot=[];
+t=[];
+for i=1:length(data)
+indexes=(data(i).interp.mocap.velocity(1,:)>=velocity_threshold(1)) & (data(i).interp.mocap.velocity(1,:)<=velocity_threshold(2))...
+    & (data(i).interp.input.command.throttle>=throttle_threshold(1)) & (data(i).interp.input.command.throttle<=throttle_threshold(2));
+if find(indexes,1)
+u0=[u0;data(i).interp.input.command.throttle(indexes)'];
+u1=[u1;data(i).interp.input.command.steering(indexes)'];
+vx=[vx;data(i).interp.mocap.velocity(1,indexes)'];
+vy=[vy;data(i).interp.mocap.velocity(2,indexes)'];
+ax=[ax;data(i).interp.mocap.local_accel_smooth(1,indexes)'];
+w=[w;data(i).interp.mocap.angular_velocity(2,indexes)'];
+dadd=atan(Pveh(3)*data(i).interp.mocap.angular_velocity(2,indexes)./data(i).interp.mocap.velocity(1,indexes));
+time=data(i).interp.time(indexes);
+t=[t;time'];
+dadd=filterdiff(dadd,time,2);
+delta=[delta;smooth(time,dadd)];
+ddotadd=get_dt(dadd',time)';
+delta_dot=[delta_dot;smooth(time,ddotadd)];
 
-ax_out=[ax_out;data(tnums(i)).interp.mocap.longaccel_smooth(idxs:idxe)];
-% vx_out=[vx_out;data(tnums(i)).interp.mocap.longvelocity_smooth(idxs:idxe)];
-% vy_out=[vy_out;zeros(size(data(tnums(i)).interp.mocap.longvelocity_smooth(idxs:idxe)))];
- w_out=[w_out;zeros(size(data(tnums(i)).interp.mocap.longvelocity_smooth(idxs:idxe)))];
-vel=[data(tnums(i)).interp.mocap.longvelocity_smooth(idxs:idxe),data(tnums(i)).interp.mocap.latvelocity_smooth(idxs:idxe),zeros(size(data(tnums(i)).interp.mocap.latvelocity_smooth(idxs:idxe)))]';
-t=data(tnums(i)).interp.time(idxs:idxe);
-velS=smooth_accel(vel,t,1590*ones(size(data(tnums(i)).interp.mocap.longvelocity_smooth(idxs:idxe))),data(tnums(i)).interp.input.throttle(idxs:idxe),t,0,.1,50);
 
-vx_out=[vx_out;velS(1,:)'];
- vy_out=[vy_out;velS(2,:)'];
-
-P_out=[P_out;data(tnums(i)).interp.input.throttle(idxs:idxe)];
-Pst_out=[Pst_out;1590*ones(size(data(tnums(i)).interp.mocap.longvelocity_smooth(idxs:idxe)))];   
-if pl
+if inputplot
 figure(1)
 hold on
-plot(data(tnums(i)).interp.time(idxs:idxe),data(tnums(i)).interp.input.throttle(idxs:idxe))
+plot(time,data(i).interp.input.command.throttle(indexes)')
 title('trained inputs')
 end
+else
+    disp(['discard trial: ',num2str(i)])
 end
+
+clearvars indexes
+end
+%delta=atan(Pveh(3)*w./vx);
+% ddes=0.224314009055080*u1- 0.008867066788855;
+% delta_dot=4.300730919846748*(ddes-delta);
 
 end
 
