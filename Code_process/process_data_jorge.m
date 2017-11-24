@@ -8,8 +8,8 @@ clear all
 close all
 clc
 data=struct('name',{},'no',{},'interp',{});
-load('sturns_11_17_workspace.mat')
-trialname='steer';
+load('speed2_11_17_workspace.mat')
+trialname='throttle';
 %% MANUALLY ENTER THE FOLLOWING VALUES
 %distance from center of mocap data to cetner of mass
 cmassoffset=[-.009;0;0];
@@ -97,7 +97,7 @@ data(num).no.mocap.time=mocaptimecut'-time(1);
 %to define imu cuts
 orientationimucut=orientation_imu(:,idxs_start_imu:idxs_end_imu);
 Rotimucut=Rot_imu(idxs_start_imu:idxs_end_imu);
-angVimucut=angV_imu(idxs_start_imu:idxs_end_imu);
+angVimucut=angV_imu(:,idxs_start_imu:idxs_end_imu);
 imutimecut=shiftedtime_imu(idxs_start_imu:idxs_end_imu);
 accelcut=accel_imu(:,idxs_start_imu:idxs_end_imu);
 

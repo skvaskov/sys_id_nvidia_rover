@@ -1,0 +1,105 @@
+clear all
+close all
+clc
+load('steeringdata.mat')
+load('throttledata.mat')
+covars = zeros(6,6);
+
+ name='kinematic_covariance_11_17';   
+ 
+data=[wheelangle_trials,sturns,data1_11_17,data2_11_17];
+
+    sz=size(data);
+    all_est=[];
+    all_state=[];
+    all_err=[];
+    all_in=[];
+    n=0;
+    
+for j=1:sz(2)
+      
+    si= find(data(j).interp.mocap.velocity(1,:)>0.5,1);
+    ei= find(data(j).interp.mocap.velocity(1,:)>0.5,1,'last');
+    
+    if ei>si
+    % mocap info
+    time = data(j).interp.time(si:ei);
+    r_x = data(j).interp.mocap.pos(1, si:ei);
+    r_y = data(j).interp.mocap.pos( 2,si:ei);
+    r_h = data(j).interp.mocap.orientation(3,si:ei);
+    r_vx = data(j).interp.mocap.velocity(1,si:ei);
+    r_yr = data(j).interp.mocap.angular_velocity(3,si:ei);
+    r_ax = data(j).interp.mocap.local_accel_smooth(1,si:ei);
+    
+    % inputs
+    thro = data(j).interp.input.command.throttle(si:ei);
+    ster = data(j).interp.input.command.steering(si:ei);
+    in=[ster' thro'];
+    
+    %estimate wheel angle
+    r_delta=atan(0.3302*r_yr./r_vx);
+    
+    r_state=[r_x' r_y' r_h' r_yr' r_vx' r_delta'];
+    
+    
+    covar = zeros(6, 6);
+    e_state=zeros(ei-si,6);
+    
+    for i=1:ei-si
+        timestep = time(i+1) - time(i);
+        e_state(i,:) = bike_model(r_state(i,:), in(i,:), timestep);
+        err = e_state(i,:) - r_state(i+1,:);
+        covar = covar + err.' * err / timestep;
+    end
+    if isempty(find(isnan(covar),1))
+    covar = covar / (ei - si);
+    % disp(1000 * covar(1:4,1:4))
+    %disp(covar)
+    covars = (covars*n + covar*(ei-si))/(n+(ei-si));
+    n=n+(ei-si);
+    
+    e_state=[r_state(1,:);e_state];
+    error=e_state-r_state;
+    all_state=[all_state;r_state];
+    all_est=[all_est;e_state];
+    all_err=[all_err;error];
+    all_in=[all_in;in];
+    end
+    end
+end
+
+figure
+    title(' Accel, Yaw Rate, & Inputs')
+    hold on
+    yyaxis left
+    plot(all_state(:,4) , 'r')
+    plot(all_state(:,5), 'b')
+    plot(all_state(:,6), 'k')
+    yyaxis right
+    plot(all_in(:,2), 'g')
+    plot(all_in(:,1), 'm')
+      legend('\omega','v_x','delta','throttle','steering')
+   figure
+    title('Errors')
+    hold on
+    plot(all_err(:,4), 'bx')
+    plot(all_err(:,5), 'kx')
+    legend('\omega','v_x')
+        
+  figure
+    subplot(2,1,1)
+    plot(all_state(:,4))
+    hold on
+    plot(all_est(:,4))
+    legend('act','est')
+    title('Actual vs Estimated: \omega')
+    subplot(2,1,2)
+    plot(all_state(:,5))
+    hold on
+    plot(all_est(:,5))
+    legend('act','est')
+    title('Actual vs Estimated: v_x')
+    
+disp(covars)
+clearvars -except name n covars data all*
+save([name,'.mat'])
