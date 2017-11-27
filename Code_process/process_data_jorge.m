@@ -104,8 +104,8 @@ accelcut=accel_imu(:,idxs_start_imu:idxs_end_imu);
 [orientationS_imu_cut,angVS_imu_cut,angA_imu_cut,angAS_imu_cut,accel_imu_cut,accelS_imu_cut] = ...
     get_smooth_imu(orientationimucut,Rotimucut,angVimucut,accelcut,imutimecut,steeringcut,throttlecut,commandtimecut);
 
-data(num).no.imu.global_accel=accel_imu_cut;
-data(num).no.imu.global_accel_smooth=accelS_imu_cut;
+data(num).no.imu.measured_accel=accel_imu_cut;
+data(num).no.imu.measured_accel_smooth=accelS_imu_cut;
 
 data(num).no.imu.angular_velocity=angVS_imu_cut;
 
@@ -160,8 +160,8 @@ data(num).interp.imu.angular_accel=interp1(imutimecut,angA_imu_cut',time)';
 data(num).interp.imu.angular_accel_smooth=interp1(imutimecut,angAS_imu_cut',time)'; 
 
 
-data(num).interp.imu.global_accel=interp1(imutimecut,accel_imu_cut',time)';
-data(num).interp.imu.global_accel_smooth=interp1(imutimecut,accelS_imu_cut',time)';
+data(num).interp.imu.measured_accel=interp1(imutimecut,accel_imu_cut',time)';
+data(num).interp.imu.measured_accel_smooth=interp1(imutimecut,accelS_imu_cut',time)';
 
 end
 end

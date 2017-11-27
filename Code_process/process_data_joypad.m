@@ -57,8 +57,8 @@ data(num).no.mocap.time=shiftedtime_mocap'-time(1);
 [orientationS_imu,angVS_imu,angA_imu,angAS_imu,accel_imu,accelS_imu] = ...
     get_smooth_imu(orientation_imu,Rot_imu,angV_imu,accel_imu,shiftedtime_imu,steering_command_combined,throttle_command_combined,shiftedtime_command_combined);
 
-data(num).no.imu.global_accel=accel_imu;
-data(num).no.imu.global_accel_smooth=accelS_imu;
+data(num).no.imu.measured_accel=accel_imu;
+data(num).no.imu.measured_accel_smooth=accelS_imu;
 
 data(num).no.imu.angular_velocity=angVS_imu;
 
@@ -116,8 +116,8 @@ data(num).interp.imu.angular_accel=interp1(shiftedtime_imu,angA_imu',time)';
 data(num).interp.imu.angular_accel_smooth=interp1(shiftedtime_imu,angAS_imu',time)'; 
 
 
-data(num).interp.imu.global_accel=interp1(shiftedtime_imu,accel_imu',time)';
-data(num).interp.imu.global_accel_smooth=interp1(shiftedtime_imu,accelS_imu',time)';
+data(num).interp.imu.measured_accel=interp1(shiftedtime_imu,accel_imu',time)';
+data(num).interp.imu.measured_accel_smooth=interp1(shiftedtime_imu,accelS_imu',time)';
 
 
 end
