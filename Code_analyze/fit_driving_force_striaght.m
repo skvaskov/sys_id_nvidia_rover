@@ -7,7 +7,7 @@ clc
 
 %% ENTER info
 load('throttledata.mat')
-training=[data1_11_17,data2_11_17];
+training=[data1_11_17,data2_11_17,data1_11_28];
 clearvars -except training
 %load('joystickdata.mat')
 %training=[training,data_11_17];

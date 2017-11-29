@@ -1,4 +1,4 @@
-function [const] = get_const_straight(u0,vx,ax,Pveh,deg)
+function [const] = get_const_turn(u0,vx,ax,Pveh,deg)
 %column vectors of inu0ut, velocity, local acceleration,yaw rate, wheel
 %angle, wheel angle dot, u0veh=[m,Iz,l,lr], degree is degree fit of
 %polynomial
