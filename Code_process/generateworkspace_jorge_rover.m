@@ -5,13 +5,13 @@
 clc
 clear all
 close all
-trialnames={'speed1_11_17'};
+trialnames={'speed1_11_28','turns_11_28'};
 for it=1:length(trialnames)
 clearvars -except it trialnames 
 %enter file path to place where raw data is stored
 %enter trial name
 trialname=trialnames{it};
-full=['~/Documents/MATLAB/Rover_Data/sys_id_jorge/Raw_Data/',trialname];
+full=['~/Documents/MATLAB/Rover_Data/sys_id_nvidia_rover/Raw_Data/',trialname];
 %% motor
 %load motor data
 motorstates_name=[full,'_pololu_motor_states.csv'];

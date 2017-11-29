@@ -4,20 +4,21 @@
 clear all
 close all
 clc
-tname='speed1_11_17_workspace.mat';
+
+tname='circles_right_11_28_workspace.mat';
 load(tname)
 %% select range of each data type (motor state, motor command, imu, mocap) to view
-imusp=8000:12000;
-mocapsp=2000:8000;
-pulsesp=1:12000;
-commandsp=1:50;
+imusp=800:2500;
+mocapsp=100:1500;
+pulsesp=300:1300;
+commandsp=1:35;
 
 
 
 %%
 if exist('accel_imu','var')
-accxbias=mean(accel_imu(1,1:8000));
-accybias=mean(accel_imu(2,1:8000));
+accxbias=mean(accel_imu(1,1:150));
+accybias=mean(accel_imu(2,1:150));
 end
 vsp=get_velocity(CenterPosS(:,mocapsp),Rot_mocap,time_mocap(mocapsp));
 vspS=smooth_3(vsp,time_mocap(mocapsp));
@@ -30,11 +31,11 @@ accelspS=[smooth(time_mocap(mocapsp),accelsp(1,:))';smooth(time_mocap(mocapsp),a
 
 %% MANUALLY ENTER THE FOLLOWING VALUES
 if exist('accel_imu','var')
-shift_imu=time_imu(start_imu+1)+54.22;
+shift_imu=time_imu(start_imu+1)+7.146;
 end
-shift_command=time_throttle_command(start_command+1)+54.08;
-shift_motorstates=time_motorstates(start_motorstates+1)+41.02+54.26;
-shift_mocap=time_mocap(start_mocap)+95.33;
+shift_command=time_throttle_command(start_command+1);
+shift_motorstates=time_motorstates(start_motorstates+1)+11.1;
+shift_mocap=time_mocap(start_mocap);
 
 if exist('accel_imu','var')
 shiftedtime_imu=time_imu-shift_imu;
@@ -77,7 +78,14 @@ end
 ylim([-3 3])
 %%
 sv=input('enter 521 if you want to save the shift values: ')
-if sv==521
+if exist('accel_imu','var')
+    if sv==521
     save(tname,'shift_*','*bias','-append')
     disp('ok')
+    end
+else
+    if sv==521
+    save(tname,'shift_*','-append')
+    disp('ok')
+    end
 end
