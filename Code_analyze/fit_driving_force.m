@@ -13,9 +13,9 @@ clearvars -except training
 %training=[training,data_11_17];
 clearvars -except training
 
-degree=0;
-throttle_threshold=[0.0,0.0];
-velocity_threshold=[0.2,3];
+degree=2;
+throttle_threshold=[-3.0,-0.4];
+velocity_threshold=[0.25,3.0];
 m=7.780;
 l=.3302;
 lr=.12;

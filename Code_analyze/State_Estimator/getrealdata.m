@@ -3,73 +3,44 @@ clear all
 close all
 clc
 
-load('/Users/seanvaskov/Documents/MATLAB/Rover_Data/sys_id_nvidia_rover/Code_analyze/Processed_Data/steeringdata.mat')
-trial=sturns(4);
-path=['/Users/seanvaskov/Documents/MATLAB/Rover_Data/sys_id_nvidia_rover/Code_analyze/State_Estimator'];
-name=['real_sturn'];
+load('/Users/seanvaskov/Documents/MATLAB/Rover_Data/sys_id_nvidia_rover/Code_analyze/Processed_Data/joystickdata.mat')
+trial=data_11_17(2);
+path=['/Users/seanvaskov/Documents/MATLAB/Rover_Data/sys_id_nvidia_rover/Code_analyze/State_Estimator/Data/'];
+name=['joy'];
 
 %%
-motime=trial.no.mocap.time;
-imutime=trial.no.imu.time;
-enctime=trial.no.encoder.time;
-%comptime=trial.no.compass.time;
-intime=trial.no.input.time;
+time=trial.interp.time;
 
-starttime=intime(1);
-endtime=intime(end);
 
 %write csv file for trajectory
-T=motime';
-%startmocap at 0 heading
-theta=mean(trial.no.mocap.heading_unwrapped_smooth(1:5));
-ipos=mean(trial.no.mocap.pos(1:2,1:5),2);
-pos= [cos(theta) sin(theta);-sin(theta) cos(theta)]*(trial.no.mocap.pos(1:2,:)-ipos);
-Z=[pos;...
-    trial.no.mocap.heading_unwrapped_smooth-theta;...
-    trial.no.mocap.longvelocity_smooth;...
-    trial.no.mocap.latvelocity_smooth;...
-    trial.no.mocap.yawrate_smooth;...
-    atan2(trial.no.mocap.yawrate_smooth*.29,trial.no.mocap.longvelocity_smooth)
-    trial.no.mocap.longaccel_smooth-trial.no.mocap.latvelocity_smooth.*trial.no.mocap.yawrate_smooth;...
-    trial.no.mocap.lataccel_smooth+trial.no.mocap.longvelocity_smooth.*trial.no.mocap.yawrate_smooth];
+estwheelangle=atan(0.3302*trial.interp.mocap.angular_velocity(3,:)./trial.interp.mocap.velocity(1,:));
 
-csvwrite([path,name,'_traj.csv'],[T;Z]');
+Z=[trial.interp.mocap.pos(1:2,:);...
+    trial.interp.mocap.orientation(3,:);...
+    trial.interp.mocap.angular_velocity(3,:);...
+    trial.interp.mocap.velocity(1,:);...
+    estwheelangle];
+csvwrite([path,name,'_traj.csv'],[time;Z]');
 
 %write csv file for inputs
-U=[intime,...
-    trial.no.input.steering(:),...
-    trial.no.input.throttle(:)];
-csvwrite([path,name,'_input.csv'],U);
+U=[trial.interp.input.command.steering;...
+   trial.interp.input.command.throttle];
+U(isnan(U))=0;
+csvwrite([path,name,'_input.csv'],[time;U]');
 
 %write csv file for imudata (yaw rate, long accel)
-is=find(imutime>=starttime,1);
-ie=find(imutime<=endtime,1,'last');
-meas_imu=[imutime(is:ie)';...
-    trial.no.imu.yawrate(is:ie);...
-    trial.no.imu.longaccel(is:ie);...
-    trial.no.imu.lataccel(is:ie)];
-csvwrite([path,name,'_measimu.csv'],meas_imu');
-clearvars is ie
+meas_imu=[trial.interp.imu.angular_velocity(3,:);...
+    trial.interp.imu.measured_accel(1,:);...
+    trial.interp.imu.measured_accel(2,:)];
+meas_imu(isnan(meas_imu))=0;
+csvwrite([path,name,'_measimu.csv'],[time;meas_imu]');
 
-%write csv file for encoderdata
-is=find(enctime>=starttime,1);
-ie=find(enctime<=endtime,1,'last');
-vxenc=(trial.no.encoder.left+trial.no.encoder.right)/2;
-meas_vx=[enctime(is:ie)';...
-        vxenc];
-csvwrite([path,name,'_measvx.csv'],meas_vx');
-clearvars is ie 
 
 %write csv file for "slam"
-is=find(motime>=starttime,1);
-ie=find(motime<=endtime,1,'last');
-ts=motime(is):1/2:motime(ie);
-h=trial.no.mocap.heading_unwrapped_smooth(is:ie)-theta;
-pos=pos(1:2,is:ie);
-measslam=interp1(motime(is:ie),[pos;h]',ts);
-measslam=[ts',measslam];
-csvwrite([path,name,'_measslam.csv'],measslam);
-clearvars is ie 
+ts=time(1):0.5:time(end);
+measslam=interp1(time,[trial.interp.mocap.pos(1:2,:);trial.interp.mocap.orientation(3,:)]',ts);
+csvwrite([path,name,'_measslam.csv'],[ts',measslam]);
+
 %write csv file for recordered stateestimator
 % State=[trial.no.state.time';...
 %     trial.no.state.pos(1:2,:);...

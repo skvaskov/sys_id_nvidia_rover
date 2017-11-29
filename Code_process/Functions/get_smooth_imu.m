@@ -6,12 +6,11 @@ function [orientationS,angVS,angA,angAS,accel,accelS] = get_smooth_imu(orientati
 %calibrated but not smooth acceleration
 
 
-orientation=[1*ones(1,length(time));-1*ones(1,length(time));-1*ones(1,length(time))].*orientation;
 headingU=unwrap(orientation(3,:));
 headingU=filterdiff(headingU,time,0.25);
 orientationS=smooth_3([orientation(1,:);orientation(2,:);headingU],time);
 
-angV=[1*ones(1,length(time));-1*ones(1,length(time));-1*ones(1,length(time))].*angV;
+
 angVS=smooth_3(angV,time);
 
 

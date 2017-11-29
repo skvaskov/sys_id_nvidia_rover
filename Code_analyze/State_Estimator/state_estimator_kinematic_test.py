@@ -118,8 +118,8 @@ def observe_imu(x_in,inputs):
 
     obs=np.zeros(3)
     obs[0]=-w
-    obs[1]=b*w_dot+a*w*w-(vx_dot-lr*w*w)
-    obs[2]=-a*w_dot+b*w*w-(lr*w_dot+vx*w)
+    obs[1]=b*w_dot+a*w*w+(vx_dot-lr*w*w)
+    obs[2]=a*w_dot-b*w*w-(lr*w_dot+vx*w)
 
     return obs
 
@@ -236,6 +236,19 @@ def definition():
     p_err[4][5] = p_err[5][4]
     p_err[5][5] = 0.0026761
 
+    posalert(p_err,'inital process covariance')
+
+    state_estimator = UKF(6, 3, p_err, X, P, .001, 0.0, 2.0, iterate_new_bicycle, observe_imu)
+    # global variables for steering and throttle channels
+    ster_chl = 0.0
+    thro_chl = 0.0
+    # constants to update accel at 50hz
+    lastUpdateSet = False
+    lastUpdate = 0
+    last_predict_set = False
+    last_predict_time = 0
+
+def main():
     #imu noise yaw rate, ax, ay
 
     r_imu = np.zeros([3, 3])
@@ -251,30 +264,15 @@ def definition():
     r_imu[0][2]=r_imu[2][1]
     r_imu[1][2]=r_imu[2][2]
     r_imu[2][2]=0.11932
+    posalert(r_imu,'initial measurement covariance')
 
-
-    posalert(R,'initial measurement covariance')
-    posalert(p_err,'inital process covariance')
-
-    state_estimator = UKF(6, 3, p_err, X, P, .001, 0.0, 2.0, iterate_new_bicycle, observe_imu)
-    # global variables for steering and throttle channels
-    ster_chl = 0.0
-    thro_chl = 0.0
-    # constants to update accel at 50hz
-    lastUpdateSet = False
-    lastUpdate = 0
-    last_predict_set = False
-    last_predict_time = 0
-
-def main():
-
-    tname='real_sturn'
-    savename='real_sturn_stateest'
+    tname='joy'
+    savename='joy_stateest'
     time_slam=list()
     x=list()
     y=list()
     psis=list()
-    with open('data/'+tname+'_measslam.csv', 'r') as csvfile:
+    with open('Data/'+tname+'_measslam.csv', 'r') as csvfile:
         reader = csv.reader(csvfile)
         # read data
         for row in reader:
@@ -287,19 +285,19 @@ def main():
     time_all=list()
     u0=list()
     u1=list()
-    with open('data/'+tname+'_input.csv', 'r') as csvfile:
+    with open('Data/'+tname+'_input.csv', 'r') as csvfile:
         reader = csv.reader(csvfile)
         # read data
         for row in reader:
             time_all.append(float(row[0]))
-            u0.append(float(row[1]))
-            u1.append(float(row[2]))
+            u0.append(float(row[2]))
+            u1.append(float(row[1]))
 
     vx=list()
     yr=list()
     ax=list()
     ay=list()
-    with open('data/'+tname+'_measimu.csv', 'r') as csvfile:
+    with open('Data/'+tname+'_measimu.csv', 'r') as csvfile:
         reader = csv.reader(csvfile)
         # read data
         for row in reader:
@@ -308,7 +306,7 @@ def main():
             ay.append(float(row[3]))
 
     last_time=time_all[0]
-    outputfile=open('data/'+savename+'.csv','wt')
+    outputfile=open('Data/'+savename+'.csv','wt')
 
     writer=csv.writer(outputfile)
     time_all=list(set(time_all))
@@ -326,7 +324,9 @@ def main():
         inputs=np.array([u1[idx],u0[idx]])
         state_estimator.predict(d_time,inputs)
         imu_data=np.array([yr[idx],ax[idx],ay[idx]])
-        state_estimator.update([0,1,2],imu_data,R,inputs)
+        #imu_data=np.array([yr[idx]])
+        state_estimator.update([0,1,2],imu_data,r_imu,inputs)
+        #state_estimator.update([0],imu_data,r_imu[0][0],inputs)
         last_time=cur_time
 
         cur_state=state_estimator.get_state()
