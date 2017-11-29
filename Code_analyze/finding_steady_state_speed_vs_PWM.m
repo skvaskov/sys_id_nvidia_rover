@@ -1,6 +1,6 @@
 clear ; clc ; close all
-load('throttledata.mat')
-data=data2_11_17;
+load('steeringdata.mat')
+data=circles;
 
 %%
 sz=size(data);
