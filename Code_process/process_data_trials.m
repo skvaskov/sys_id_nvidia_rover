@@ -8,13 +8,15 @@ clear all
 close all
 clc
 data=struct('name',{},'no',{},'interp',{});
-load('sturns_11_17_workspace.mat')
-trialname='sturns';
+load('decel2_11_28_workspace.mat')
+trialname='decel';
 %% MANUALLY ENTER THE FOLLOWING VALUES
 %distance from center of mocap data to cetner of mass
 cmassoffset=[-.009;0;0];
 %%
+if exist('time_imu','var')
 shiftedtime_imu=time_imu-shift_imu;
+end
 shiftedtime_motorstates=time_motorstates-shift_motorstates;
 shiftedtime_throttle_command=time_throttle_command-shift_command;
 shiftedtime_steering_command=time_steering_command-shift_command;
@@ -27,7 +29,7 @@ throttle_command_combined=zoh(shiftedtime_throttle_command,throttle_command,shif
 steering_command_combined=zoh(shiftedtime_steering_command,steering_command,shiftedtime_command_combined);
 
 %%
-eq=throttle_command<-0.05;
+eq=throttle_command==0;
 diffeq=abs(diff(eq));
 idxswitch=find(diffeq);
 if idxswitch(1)~=1
@@ -37,16 +39,18 @@ ln=length(idxswitch)/2;
 for num=1:ln
 idxs_start=idxswitch(2*num-1)+1;
 idxs_end=idxswitch(2*num);
-time_start=shiftedtime_throttle_command(idxs_start)-0.5;
-time_end=shiftedtime_throttle_command(idxs_end)+2;
+time_start=shiftedtime_throttle_command(idxs_start)-0.25;
+time_end=shiftedtime_throttle_command(idxs_end);
 
 
 idxs_start_mocap=find(shiftedtime_mocap>=time_start,1);
 idxs_end_mocap=find(shiftedtime_mocap<=time_end,1,'last');
-
+if exist('time_imu','var')
 idxs_start_imu=find(shiftedtime_imu>=time_start,1);
 idxs_end_imu=find(shiftedtime_imu<=time_end,1,'last');
-
+else
+    idxs_start_imu=[];
+end
 idxs_start_command=find(shiftedtime_command_combined>=time_start,1);
 idxs_end_command=find(shiftedtime_command_combined<=time_end,1,'last');
 
@@ -95,6 +99,7 @@ data(num).no.mocap.local_accel_smooth=accelS_mocap_cut;
 data(num).no.mocap.time=mocaptimecut'-time(1);
 
 %to define imu cuts
+if ~isempty(idxs_start_imu)
 orientationimucut=orientation_imu(:,idxs_start_imu:idxs_end_imu);
 Rotimucut=Rot_imu(idxs_start_imu:idxs_end_imu);
 angVimucut=angV_imu(:,idxs_start_imu:idxs_end_imu);
@@ -115,7 +120,7 @@ data(num).no.imu.angular_accel_smooth=angAS_imu_cut;
 data(num).no.imu.orientation=orientationS_imu_cut;
 
 data(num).no.imu.time=imutimecut'-time(1);
-
+end
 %commandinput
 
 data(num).no.input.command.time=commandtimecut'-time(1);
@@ -153,6 +158,7 @@ data(num).interp.input.command.steering=zoh(commandtimecut,steeringcut,time)';
 data(num).interp.input.pulse.throttle=interp1(shiftedtime_motorstates(idxs_start_motorstates:idxs_end_motorstates),throttle_pulse(idxs_start_motorstates:idxs_end_motorstates),time)';
 data(num).interp.input.pulse.steering=interp1(shiftedtime_motorstates(idxs_start_motorstates:idxs_end_motorstates),throttle_pulse(idxs_start_motorstates:idxs_end_motorstates),time)';
 %imu
+if ~isempty(idxs_start_imu)
 data(num).interp.imu.orientation=interp1(imutimecut,orientationS_imu_cut',time)';
 data(num).interp.imu.angular_velocity=interp1(imutimecut,angVS_imu_cut',time)';
 
@@ -162,7 +168,7 @@ data(num).interp.imu.angular_accel_smooth=interp1(imutimecut,angAS_imu_cut',time
 
 data(num).interp.imu.measured_accel=interp1(imutimecut,accel_imu_cut',time)';
 data(num).interp.imu.measured_accel_smooth=interp1(imutimecut,accelS_imu_cut',time)';
-
+end
 end
 end
 
