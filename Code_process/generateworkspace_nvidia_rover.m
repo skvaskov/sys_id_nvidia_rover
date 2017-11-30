@@ -5,7 +5,7 @@
 clc
 clear all
 close all
-trialnames={'speed1_11_28','turns_11_28'};
+trialnames={'circles_11_29','turns_11_29'};
 for it=1:length(trialnames)
 clearvars -except it trialnames 
 %enter file path to place where raw data is stored

@@ -8,7 +8,7 @@ x=table2array(excel(:,9));
 y=table2array(excel(:,10));
 z=table2array(excel(:,11));
 
-marker=;
+marker=98;
 
 x_mean=mean(x(id==marker))
 y_mean=mean(y(id==marker))
