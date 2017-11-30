@@ -5,9 +5,9 @@ load('steeringdata.mat')
 load('throttledata.mat')
 covars = zeros(6,6);
 
- name='kinematic_covariance_11_17';   
+ name='kinematic_covariance_11_29';   
  
-data=[wheelangle_trials,sturns,data1_11_17,data2_11_17];
+data=[circles_11_29,turns_11_29,data2_11_17,data1_11_28,decel_11_28];
 
     sz=size(data);
     all_est=[];
@@ -47,7 +47,7 @@ for j=1:sz(2)
     
     for i=1:ei-si
         timestep = time(i+1) - time(i);
-        e_state(i,:) = bike_model(r_state(i,:), in(i,:), timestep);
+        e_state(i,:) = kinbike_model(r_state(i,:), in(i,:), timestep);
         err = e_state(i,:) - r_state(i+1,:);
         covar = covar + err.' * err / timestep;
     end

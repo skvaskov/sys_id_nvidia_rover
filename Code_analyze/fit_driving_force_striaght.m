@@ -7,14 +7,15 @@ clc
 
 %% ENTER info
 load('throttledata.mat')
-training=[data1_11_17,data2_11_17,data1_11_28];
+decel_11_28(end)=[];
+training=[data2_11_17,data1_11_28,decel_11_28];
 clearvars -except training
 %load('joystickdata.mat')
 %training=[training,data_11_17];
 clearvars -except training
 
-degree=2;
-throttle_threshold=[-3.0,-0.4];
+degree=0;
+throttle_threshold=[0,3.0];
 velocity_threshold=[0.25,3.0];
 m=7.780;
 l=.3302;
@@ -31,7 +32,7 @@ untrained=training(untrainedidx);
 training(untrainedidx)=[];
 
 
-[u0,vx,ax,~,~,~,~,~]=pwm_mocap_points(training,Pveh,velocity_threshold,throttle_threshold,inputplot);
+[u0,~,vx,ax,~,~,~,~,~]=pwm_mocap_points(training,Pveh,velocity_threshold,throttle_threshold,inputplot);
 
 
 
@@ -40,10 +41,10 @@ const=get_const_straight(u0,vx,ax,Pveh,degree);
 
 %% check answer 
 
-[u0est,vxest,axest,~,~,~,~,test]=pwm_mocap_points(untrained,Pveh,velocity_threshold,throttle_threshold,inputplot);
+[u0est,~,vxest,axest,~,~,~,~,test]=pwm_mocap_points(untrained,Pveh,velocity_threshold,throttle_threshold,inputplot);
 while isempty(u0est)
  disp('Plotting trained data! untrained was empty')   
-[u0est,vxest,axest,~,~,~,~,test]=pwm_mocap_points(training(round(rand*(sz(2)-2))+1),Pveh,velocity_threshold,throttle_threshold,inputplot);
+[u0est,~,vxest,axest,~,~,~,~,test]=pwm_mocap_points(training(round(rand*(sz(2)-2))+1),Pveh,velocity_threshold,throttle_threshold,inputplot);
 end
 estax=est_ax_straight(u0est,vxest,axest,Pveh,degree,const);
 figure

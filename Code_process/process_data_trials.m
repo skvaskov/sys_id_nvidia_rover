@@ -9,7 +9,7 @@ close all
 clc
 data=struct('name',{},'no',{},'interp',{});
 load('circles_11_29_workspace.mat')
-trialname='turn_1';
+trialname='circle';
 %% MANUALLY ENTER THE FOLLOWING VALUES
 %distance from center of mocap data to cetner of mass
 cmassoffset=[0;0;0];

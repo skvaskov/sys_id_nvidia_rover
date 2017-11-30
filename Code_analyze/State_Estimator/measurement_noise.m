@@ -7,7 +7,7 @@ name='imu_noise_yr_ax_ay_11_17';
 
 load('steeringdata.mat')
 load('throttledata.mat')
-data=[wheelangle_trials,data1_11_17,data2_11_17];
+data=[circles_11_29,data1_11_17,data2_11_17,turns_11_29];
     
     sz=size(data);
     all_imumeas=[];
@@ -35,8 +35,8 @@ for j=1:sz(2)
     %imuinfo
     i_time=data(j).no.imu.time;
     i_yr=data(j).no.imu.angular_velocity(3,:);
-    i_ax=data(j).no.imu.global_accel_smooth(1,:);
-    i_ay=data(j).no.imu.global_accel_smooth(2,:);
+    i_ax=data(j).no.imu.measured_accel_smooth(1,:);
+    i_ay=data(j).no.imu.measured_accel_smooth(2,:);
     i_vx=intmeas(i_ax,i_time);
     i_psi=data(j).no.imu.orientation(3,:);
     

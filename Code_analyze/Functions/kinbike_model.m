@@ -1,4 +1,4 @@
-function state = bike_model(state, input, timestep)
+function state = kinbike_model(state, input, timestep)
     m=7.78;
     Iz=.2120;
     l=.3302;
@@ -24,18 +24,17 @@ function state = bike_model(state, input, timestep)
     
     %driving force input(2)
     if u0<=-0.35
-        cm_accel=[-32.3444674451266;-107.4936376966535;5.4559263010323;35.5572000100370;0.7595495751754;-48.4489780846895;21.5881438769874];
-        Frx=[1 u0 vx_prev vx_prev*u0 vx_prev^2 u0^2 vx_prev*u0^2]*cm_accel;
-    elseif u0>=1.0
-        cm_brake=[-5.345435991947356;-11.906846985500659;3.564802758464205];
+        cm_accel=[-26.8598346219134;-87.6546485543967;3.14128477268640;35.5572000100370 ; 0.7595495751754 ;-48.4489780846895 ;15.3781821037200;-0.474095491113532];
+        Frx=[1 u0 vx_prev vx_prev*u0 vx_prev^2 u0^2 vx_prev*u0^2 w_prev^2]*cm_accel;
+    elseif u0>0.0
+        cm_brake=[-4.16959507422809;-15.1515686571814;3.564802758464205];
         Frx=[1 vx_prev vx_prev^2]*cm_brake;
     else
-        if vx_prev>0
-            cm_coast=[-5.767811170782461;0.378942271548532;-0.346210024796956];
-             Frx=[1 vx_prev vx_prev^2]*cm_coast;
-        elseif vx_prev<0
-            cm_coast=[-5.767811170782461;0.378942271548532;-0.346210024796956];
-             Frx=-[1 vx_prev vx_prev^2]*cm_coast;
+        if vx_prev>0.05
+            cm_coast=[-5.64256417783774;-13.9194041124684;-2.30808321006301;0.407655664039037];
+             Frx=-[1 u0 vx_prev vx_prev^2]*cm_coast;
+        elseif vx_prev<0.05       
+             Frx=0.5;
         else 
             Frx=0;
         end
