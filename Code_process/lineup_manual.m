@@ -5,20 +5,20 @@ clear all
 close all
 clc
 
-tname='circles_right_11_28_workspace.mat';
+tname='turns_11_29_workspace.mat';
 load(tname)
 %% select range of each data type (motor state, motor command, imu, mocap) to view
-imusp=800:2500;
-mocapsp=100:1500;
-pulsesp=300:1300;
-commandsp=1:35;
+imusp=1:4000;
+mocapsp=1:1500;
+pulsesp=1:1500;
+commandsp=1:28;
 
 
 
 %%
 if exist('accel_imu','var')
-accxbias=mean(accel_imu(1,1:150));
-accybias=mean(accel_imu(2,1:150));
+accxbias=mean(accel_imu(1,1:500));
+accybias=mean(accel_imu(2,1:500));
 end
 vsp=get_velocity(CenterPosS(:,mocapsp),Rot_mocap,time_mocap(mocapsp));
 vspS=smooth_3(vsp,time_mocap(mocapsp));
@@ -31,10 +31,10 @@ accelspS=[smooth(time_mocap(mocapsp),accelsp(1,:))';smooth(time_mocap(mocapsp),a
 
 %% MANUALLY ENTER THE FOLLOWING VALUES
 if exist('accel_imu','var')
-shift_imu=time_imu(start_imu+1)+7.146;
+shift_imu=time_imu(start_imu+1);
 end
 shift_command=time_throttle_command(start_command+1);
-shift_motorstates=time_motorstates(start_motorstates+1)+11.1;
+shift_motorstates=time_motorstates(start_motorstates+1)+9.342;
 shift_mocap=time_mocap(start_mocap);
 
 if exist('accel_imu','var')

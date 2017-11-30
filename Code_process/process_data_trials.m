@@ -8,8 +8,8 @@ clear all
 close all
 clc
 data=struct('name',{},'no',{},'interp',{});
-load('decel2_11_28_workspace.mat')
-trialname='decel';
+load('turns_11_29_workspace.mat')
+trialname='turn_1';
 %% MANUALLY ENTER THE FOLLOWING VALUES
 %distance from center of mocap data to cetner of mass
 cmassoffset=[-.009;0;0];
