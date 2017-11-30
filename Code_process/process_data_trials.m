@@ -8,11 +8,11 @@ clear all
 close all
 clc
 data=struct('name',{},'no',{},'interp',{});
-load('turns_11_29_workspace.mat')
+load('circles_11_29_workspace.mat')
 trialname='turn_1';
 %% MANUALLY ENTER THE FOLLOWING VALUES
 %distance from center of mocap data to cetner of mass
-cmassoffset=[-.009;0;0];
+cmassoffset=[0;0;0];
 %%
 if exist('time_imu','var')
 shiftedtime_imu=time_imu-shift_imu;
