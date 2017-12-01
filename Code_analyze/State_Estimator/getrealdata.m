@@ -3,10 +3,10 @@ clear all
 close all
 clc
 
-load('/Users/seanvaskov/Documents/MATLAB/Rover_Data/sys_id_nvidia_rover/Code_analyze/Processed_Data/joystickdata.mat')
-trial=data_11_17(2);
+load('/Users/seanvaskov/Documents/MATLAB/Rover_Data/sys_id_nvidia_rover/Code_analyze/Processed_Data/steeringdata.mat')
+trial=circles_11_29(9);
 path=['/Users/seanvaskov/Documents/MATLAB/Rover_Data/sys_id_nvidia_rover/Code_analyze/State_Estimator/Data/'];
-name=['joy'];
+name=['circles'];
 
 %%
 time=trial.interp.time;

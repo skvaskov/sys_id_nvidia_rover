@@ -7,7 +7,7 @@ m=Pveh(1);
 
 
 b=ax*m;
-
+mx=max(b);
 if deg==0
     A=[ones(size(u0)) vx vx.^2];        
 end
@@ -25,7 +25,8 @@ end
 if deg==4
     A=[ones(size(u0)) u0 vx u0.*vx vx.^2 u0.^2 vx.*u0.^2 u0.*vx.^2 vx.^3 u0.^3 vx.^2.*u0.^2 vx.*u0.^3 u0.*vx.^3 u0.^4 vx.^4];   
 end
-const=A\b;
+const=A\(b/mx);
+const=const*mx;
     figure
     plot(b)
     hold on

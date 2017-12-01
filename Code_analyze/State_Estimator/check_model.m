@@ -3,12 +3,13 @@ close all
 clc
 load('steeringdata.mat')
 load('throttledata.mat')
+load('joystickdata.mat')
 covars = zeros(6,6);
 
- name='kinematic_covariance_11_29';   
+ name='kinematic_covariance_11_30';   
  
-data=[circles_11_29,turns_11_29,data2_11_17,data1_11_28,decel_11_28];
-
+%data=[circles_11_29,turns_11_29,data2_11_17,data1_11_28,decel_11_28];
+data=[data_11_17];
     sz=size(data);
     all_est=[];
     all_state=[];

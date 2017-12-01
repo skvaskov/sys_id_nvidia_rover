@@ -8,15 +8,15 @@ clc
 %% ENTER info
 load('throttledata.mat')
 decel_11_28(end)=[];
-training=[data2_11_17,data1_11_28,decel_11_28];
+training=[data1_11_17,data2_11_17,data1_11_28];
 clearvars -except training
 %load('joystickdata.mat')
 %training=[training,data_11_17];
 clearvars -except training
 
-degree=0;
-throttle_threshold=[0,3.0];
-velocity_threshold=[0.25,3.0];
+degree=2;
+throttle_threshold=[-3.0,-.4];
+velocity_threshold=[0.4,3.0];
 m=7.780;
 l=.3302;
 lr=.12;

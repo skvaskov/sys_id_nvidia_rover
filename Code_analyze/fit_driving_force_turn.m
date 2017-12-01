@@ -7,15 +7,15 @@ clc
 
 %% ENTER info
 load('throttledata.mat')
-training=[data2_11_17,data1_11_28];
+training=[data1_11_17,data2_11_17,data1_11_28];
 load('steeringdata.mat')
 training=[training,circles_11_29([3,5:end]),turns_11_29];
 clearvars -except training
 
 
 degree=2;
-throttle_threshold=[-0.55,-0.4];
-velocity_threshold=[0.25,3.0];
+throttle_threshold=[-1.0,-0.4];
+velocity_threshold=[0.4,3.0];
 m=7.780;
 l=.3302;
 lr=.12;

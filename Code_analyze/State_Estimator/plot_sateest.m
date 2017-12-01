@@ -3,7 +3,7 @@ close all
 clc
 
 path='/Users/seanvaskov/Documents/MATLAB/Rover_Data/sys_id_nvidia_rover/Code_analyze/State_Estimator/Data/';
-tname='joy';
+tname='straight';
 
 figure
 excel=readtable([path,tname,'_traj.csv']);
