@@ -36,10 +36,10 @@ load('steady_circle.mat')
 plot(throttle([3,5:end]),vx([3,5:end]),'r*')
 
 %check otherway
-vx_des=0.7;
+vx_des=1.7;
 w=1.5;
 a0=const(1)+const(3)*vx_des+const(5)*vx_des^2+const(8)*w^2;
 a1=const(2)+const(4)*vx_des;
 a2=const(6)+const(7)*vx_des;
 roots([a2,a1,a0])
-(-a1-sqrt(a1^2-4*a2*a0))/(2*a2)
+-a1

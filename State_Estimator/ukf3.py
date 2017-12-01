@@ -90,15 +90,21 @@ class UKF:
             :param inputs: list of indices of which inputs are being updated
             :param data: data corresponding to input updata
         """
+	j=0
         for i in inputs:
-            self.inputs[i]=data[i]
+            self.inputs[i]=data[j]
+            j=j+1
+
     def update_measurements(self,meas,data):
         """callback function to update inputs
             :param inputs: list of indices of which inputs are being updated
             :param data: data corresponding to input updata
         """
+        j=0
         for i in meas:
-            self.measurements[i]=data[i]
+            self.measurements[i]=data[j]
+            j=j+1
+
     def update(self,observations,r_matrix):
         """
         performs a measurement update
@@ -118,6 +124,7 @@ class UKF:
         n_data=len(observations)
         #Line (2.16)
         Z_k=np.array([self.observe(x,inputs) for x in self.sigmas.T]).T
+
         #Z_k is n_obs x n_sig
         #reduce Z_k to only the data we have measurements for
         Z_k=Z_k[observations,:]
@@ -156,7 +163,7 @@ class UKF:
 
         #Line (2.20)
         K = np.dot(P_xz, np.linalg.inv(P_zz))
-        z_actual=np.array(self.measurements)
+	z_actual = np.array(self.measurements)
         z_actual = z_actual[observations]
 
         #Line (2.21)
