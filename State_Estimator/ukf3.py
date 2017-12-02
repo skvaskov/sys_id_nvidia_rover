@@ -271,7 +271,7 @@ class UKF:
                 self.x = value
             self.sigmas=self.__get_sigmas()
 
-    def reset(self, state, covar):
+    def reset(self, state, covar, meas=self.measurements,inputs=self.inputs):
         """
         Restarts the UKF at the given state and covariance
         :param state: n_dim x 1
@@ -281,5 +281,7 @@ class UKF:
         self.lock.acquire()
         self.x = state
         self.p = covar
+        self.measurements=meas
+        self.inputs=inputs
         self.sigmas = self.__get_sigmas()
         self.lock.release()
