@@ -154,8 +154,9 @@ class UKF:
             P_zz += self.covar_weights[i] * val.dot(val.T)
 
         # add measurement noise
-        P_zz += self.r[observations,observations]
-
+        P_zz += self.r[observations[:, None],observations]
+        print observations
+        print self.r[observations[:, None],observations]
         #Line (2.19)
         # covariance of measurement with states
         P_xz = np.zeros([self.n_dim, n_data])
@@ -164,7 +165,7 @@ class UKF:
 
         #Line (2.20)
         K = np.dot(P_xz, np.linalg.inv(P_zz))
-	z_actual = np.array(self.measurements)
+        z_actual = np.array(self.measurements)
         z_actual = z_actual[observations]
 
         #Line (2.21)

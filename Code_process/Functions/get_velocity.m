@@ -13,5 +13,6 @@ end
 dS=CPos(:,end)-CPos(:,end-1);
 dt=time(end)-time(end-1);
 velocity(:,end)=R{end}'*dS/dt;
+
 end
 

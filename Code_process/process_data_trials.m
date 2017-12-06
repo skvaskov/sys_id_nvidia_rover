@@ -118,7 +118,7 @@ data(num).no.imu.angular_accel=angA_imu_cut;
 data(num).no.imu.angular_accel_smooth=angAS_imu_cut;
 
 data(num).no.imu.orientation=orientationS_imu_cut;
-
+data(num).no.imu.Rot=Rotimucut;
 data(num).no.imu.time=imutimecut'-time(1);
 end
 %commandinput

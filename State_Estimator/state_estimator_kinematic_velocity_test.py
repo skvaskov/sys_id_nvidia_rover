@@ -75,7 +75,9 @@ def iterate_new_bicycle(x_in, timestep, inputs):
     dxdt = [vx_dot/l*math.tan(delta_prev)+vx_prev/l*delta_dot/(math.cos(delta_prev)*math.cos(delta_prev)),
 	        vx_dot,
             delta_dot]
-
+    print 'inputs: '+str([ster_input, thro_input])
+    print 'states'+str(x_in)
+    print 'dxdt: '+str(dxdt)
     # compute new state
     x_out = np.zeros(3)
     for i in range(3):
@@ -212,17 +214,17 @@ def definition():
     r_imu[0][1]=r_imu[1][0]
     r_imu[1][1]=0.0018315
     r_imu[2][1]=0
-    r_imu[3][1]=-0.0037105
+    r_imu[3][1]=0.0
 
     r_imu[0][2]=r_imu[2][0]
     r_imu[1][2]=r_imu[2][1]
-    r_imu[2][2]=0.26871
-    r_imu[3][2]=-0.026971
+    r_imu[2][2]=0.0755
+    r_imu[3][2]=-0.0821
 
     r_imu[0][3]=r_imu[3][0]
     r_imu[1][3]=r_imu[3][1]
     r_imu[2][3]=r_imu[3][2]
-    r_imu[3][3]=0.11932
+    r_imu[3][3]=0.1957
 
     posalert(r_imu,'initial measurement covariance')
 
@@ -322,7 +324,7 @@ def main():
         state_estimator.update_inputs([0,1],[u1[idx],u0[idx]])
         state_estimator.predict(d_time)
         state_estimator.update_measurements([0,1,2,3],[vx[idx],yr[idx],ax[idx],ay[idx]])
-        state_estimator.update([1,2,3])
+        state_estimator.update(np.array([1]))
 
         last_time=cur_time
 
