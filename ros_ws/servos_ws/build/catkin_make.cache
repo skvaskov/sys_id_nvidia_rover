@@ -1,0 +1,2 @@
+ros_pololu_servo
+-DCATKIN_DEVEL_PREFIX=/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/servos_ws/devel -DCMAKE_INSTALL_PREFIX=/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/servos_ws/install -G Unix Makefiles

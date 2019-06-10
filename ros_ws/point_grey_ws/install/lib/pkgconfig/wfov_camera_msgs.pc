@@ -1,0 +1,8 @@
+prefix=/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/point_grey_ws/install
+
+Name: wfov_camera_msgs
+Description: Description of wfov_camera_msgs
+Version: 0.13.1
+Cflags: -I/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/point_grey_ws/install/include
+Libs: -L/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/point_grey_ws/install/lib 
+Requires: message_runtime sensor_msgs

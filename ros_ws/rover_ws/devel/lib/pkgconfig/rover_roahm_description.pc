@@ -1,0 +1,8 @@
+prefix=/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/rover_ws/devel
+
+Name: rover_roahm_description
+Description: Description of rover_roahm_description
+Version: 0.1.0
+Cflags: 
+Libs: -L/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/rover_ws/devel/lib 
+Requires: 

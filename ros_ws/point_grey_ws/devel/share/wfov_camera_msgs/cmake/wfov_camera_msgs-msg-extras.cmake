@@ -1,0 +1,2 @@
+set(wfov_camera_msgs_MESSAGE_FILES "/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/point_grey_ws/src/pointgrey_camera_driver/wfov_camera_msgs/msg/WFOVCompressedImage.msg;/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/point_grey_ws/src/pointgrey_camera_driver/wfov_camera_msgs/msg/WFOVImage.msg;/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/point_grey_ws/src/pointgrey_camera_driver/wfov_camera_msgs/msg/WFOVTrigger.msg")
+set(wfov_camera_msgs_SERVICE_FILES "")

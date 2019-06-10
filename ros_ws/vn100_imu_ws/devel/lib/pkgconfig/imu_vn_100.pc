@@ -1,0 +1,8 @@
+prefix=/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/vn100_imu_ws/devel
+
+Name: imu_vn_100
+Description: Description of imu_vn_100
+Version: 0.0.0
+Cflags: -I/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/vn100_imu_ws/src/imu_vn_100/include -I/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/vn100_imu_ws/src/imu_vn_100/vncpplib/include
+Libs: -L/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/vn100_imu_ws/devel/lib -limu_vn_100
+Requires: diagnostic_updater roscpp sensor_msgs

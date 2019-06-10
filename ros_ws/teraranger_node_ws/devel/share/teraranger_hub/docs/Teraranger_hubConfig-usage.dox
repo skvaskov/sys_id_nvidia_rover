@@ -1,0 +1,7 @@
+\subsubsection usage Usage
+\verbatim
+<node name="teraranger_hub" pkg="teraranger_hub" type="teraranger_hub">
+  <param name="Mode" type="int" value="0" />
+</node>
+\endverbatim
+

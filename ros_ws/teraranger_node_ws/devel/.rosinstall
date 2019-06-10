@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/teraranger_node_ws/devel/setup.sh

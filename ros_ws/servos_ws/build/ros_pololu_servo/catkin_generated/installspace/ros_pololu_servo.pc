@@ -1,0 +1,8 @@
+prefix=/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/servos_ws/install
+
+Name: ros_pololu_servo
+Description: Description of ros_pololu_servo
+Version: 0.0.0
+Cflags: -I/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/servos_ws/install/include
+Libs: -L/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/servos_ws/install/lib 
+Requires: roscpp rospy std_msgs message_runtime actionlib_msgs

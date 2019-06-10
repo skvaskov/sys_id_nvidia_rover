@@ -1,0 +1,15 @@
+<launch>
+ <!-- Turtlesim Node-->
+ <!-- node pkg="turtlesim" type="turtlesim_node" name="sim"/-->
+
+ <!--node pkg="teleop_pkg" type="teleop_node" name="teleop" output="screen"-->
+ <node pkg="teleop_pkg" type="teleop_node" name="teleop">
+  <!-- Axes -->
+  <param name="axis_linear" value="1" type="int"/>
+  <param name="axis_angular" value="2" type="int"/>
+  <param name="scale_linear" value="1" type="double"/>
+  <param name="scale_angular" value="2" type="double"/>
+  <param name="publish_rate" value="10" type="double"/> <!-- When publish_rate is 10 Hz, the motor receives a 20 Hz command.-->
+ </node>
+
+</launch>

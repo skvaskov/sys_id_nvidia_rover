@@ -1,0 +1,8 @@
+prefix=/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/teraranger_node_ws/devel
+
+Name: teraranger_hub
+Description: Description of teraranger_hub
+Version: 0.1.1
+Cflags: -I/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/teraranger_node_ws/devel/include -I/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/teraranger_node_ws/src/terarangerhub-ros/include
+Libs: -L/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/teraranger_node_ws/devel/lib 
+Requires: roscpp sensor_msgs std_msgs dynamic_reconfigure

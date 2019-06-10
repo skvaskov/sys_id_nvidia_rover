@@ -1,0 +1,8 @@
+prefix=/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/urg_node_ws/install
+
+Name: urg_c
+Description: Description of urg_c
+Version: 1.0.404
+Cflags: -I/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/urg_node_ws/install/include
+Libs: -L/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/urg_node_ws/install/lib -lliburg_c
+Requires: 

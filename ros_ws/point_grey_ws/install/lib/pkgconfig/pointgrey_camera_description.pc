@@ -1,0 +1,8 @@
+prefix=/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/point_grey_ws/install
+
+Name: pointgrey_camera_description
+Description: Description of pointgrey_camera_description
+Version: 0.13.1
+Cflags: 
+Libs: -L/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/point_grey_ws/install/lib 
+Requires: 

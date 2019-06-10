@@ -37,8 +37,8 @@ csvwrite([path,name,'_measimu.csv'],[time;meas_imu]');
 
 
 %write csv file for "slam"
-ts=time(1):0.5:time(end);
-measslam=interp1(time,[trial.interp.mocap.pos(1:2,:);trial.interp.mocap.orientation(3,:)]',ts);
+
+measslam=[trial.interp.mocap.pos(1:2,:);trial.interp.mocap.orientation(3,:)]';
 csvwrite([path,name,'_measslam.csv'],[ts',measslam]);
 
 %write csv file for recordered stateestimator

@@ -1,0 +1,72 @@
+#! /usr/bin/env python
+import rospy
+from geometry_msgs.msg import Pose
+from geometry_msgs.msg import Twist
+
+
+
+def main():
+    pub_rate=10
+
+    vx1=2.0
+    yaw1=0
+    time1=1.0
+
+    vx2=2.0
+    yaw2=0.0
+    time2=0.5
+
+    totaltime=time1+time2+2.0
+
+    reset_pub=rospy.Publisher('/rover/reset_state', Pose, queue_size=10)
+    cmd_pub=rospy.Publisher('rover/cmd_vel', Twist, queue_size=10)
+    
+    reset_msg=Pose()
+    reset_msg.position.x=0.0
+    reset_msg.position.y=0.0
+    reset_msg.orientation.w=1.0
+    
+    start = rospy.get_rostime()
+    r = rospy.Rate(pub_rate)
+    while (rospy.get_rostime()-start).to_sec()<0.5:
+        reset_pub.publish(reset_msg)
+        r.sleep()
+
+    msg=Twist()
+    msg.linear.x=0.0
+    msg.angular.z=0.0
+    cmd_pub.publish(msg)
+    
+    r = rospy.Rate(pub_rate)
+    start = rospy.get_rostime()
+
+    while not rospy.is_shutdown():
+        curtime = (rospy.get_rostime()-start).to_sec()
+        if curtime >totaltime:
+            msg=Twist()
+            msg.linear.x=0.0
+            msg.angular.z=0.0
+            cmd_pub.publish(msg)
+            rospy.signal_shutdown("Done")
+            break
+        elif curtime>(time1+time2):
+            msg=Twist()
+            msg.linear.x=0.0
+            msg.angular.z=0.0
+            cmd_pub.publish(msg)
+        elif curtime>time1:
+            msg=Twist()
+            msg.linear.x=vx2
+            msg.angular.z=yaw2
+            cmd_pub.publish(msg)
+        else:
+            msg=Twist()
+            msg.linear.x=vx1
+            msg.angular.z=yaw1
+            cmd_pub.publish(msg) 
+        r.sleep()
+
+if __name__ == '__main__':
+    rospy.init_node('pololu_action_server')
+    main()
+    rospy.spin()

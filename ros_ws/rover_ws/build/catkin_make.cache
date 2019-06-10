@@ -1,0 +1,2 @@
+rover_roahm/rover_roahm:rover_roahm/rover_roahm_description
+-DCATKIN_DEVEL_PREFIX=/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/rover_ws/devel -DCMAKE_INSTALL_PREFIX=/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/rover_ws/install -G Unix Makefiles

@@ -1,0 +1,2 @@
+teleop_pkg
+-DCATKIN_DEVEL_PREFIX=/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/teleop_ws/devel -DCMAKE_INSTALL_PREFIX=/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/teleop_ws/install -G Unix Makefiles

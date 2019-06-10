@@ -1,0 +1,8 @@
+prefix=/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/point_grey_ws/install
+
+Name: pointgrey_camera_driver
+Description: Description of pointgrey_camera_driver
+Version: 0.13.1
+Cflags: -I/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/point_grey_ws/install/include
+Libs: -L/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/point_grey_ws/install/lib 
+Requires: image_exposure_msgs nodelet roscpp sensor_msgs wfov_camera_msgs

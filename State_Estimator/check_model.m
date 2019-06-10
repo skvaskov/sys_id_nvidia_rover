@@ -4,9 +4,9 @@ clc
 load('steeringdata.mat')
 load('throttledata.mat')
 load('joystickdata.mat')
-covars = zeros(3,3);
+covars = zeros(7,7);
 
- name='kinematic_covariance_12_1';   
+ name='kinematic_covariance_2_8';   
  
 data=[circles_11_29,turns_11_29,data2_11_17,data1_11_28,decel_11_28];
 %data=[data_11_17];
@@ -29,6 +29,7 @@ for j=1:sz(2)
     r_y = data(j).interp.mocap.pos( 2,si:ei);
     r_h = data(j).interp.mocap.orientation(3,si:ei);
     r_vx = data(j).interp.mocap.velocity(1,si:ei);
+    r_vy = data(j).interp.mocap.velocity(2,si:ei);
     r_yr = data(j).interp.mocap.angular_velocity(3,si:ei);
     r_ax = data(j).interp.mocap.local_accel_smooth(1,si:ei);
     
@@ -38,17 +39,17 @@ for j=1:sz(2)
     in=[ster' thro'];
     
     %estimate wheel angle
-    r_delta=atan(0.3302*r_yr./r_vx);
+    r_delta=atan(0.3302*r_yr./r_vx)+5*pi/180*randn;
     
-    r_state=[ r_yr' r_vx' r_delta'];
+    r_state=[r_x' r_y' r_h' r_vx' r_vy' r_yr' r_delta'];
     
     
-    covar = zeros(3, 3);
-    e_state=zeros(ei-si,3);
+    covar = zeros(7, 7);
+    e_state=zeros(ei-si,7);
     
     for i=1:ei-si
         timestep = time(i+1) - time(i);
-        e_state(i,:) = kinbike_model_vel(r_state(i,:), in(i,:), timestep);
+        e_state(i,:) = kinbike_model_F(r_state(i,:), in(i,:), timestep);
         err = e_state(i,:) - r_state(i+1,:);
         covar = covar + err.' * err / timestep;
     end
@@ -83,8 +84,8 @@ figure
    figure
     title('Errors')
     hold on
-    plot(all_err(:,1), 'bx')
-    plot(all_err(:,2), 'kx')
+    plot(all_err(:,4), 'bx')
+    plot(all_err(:,6), 'kx')
     legend('\omega','v_x')
         
   figure

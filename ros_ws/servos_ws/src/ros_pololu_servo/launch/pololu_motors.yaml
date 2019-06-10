@@ -1,0 +1,28 @@
+# Pololu based motors
+
+1:  # steering_wheel:
+  pololu_id: 12
+  motor_id: 1
+  init: 1500
+  min: 820
+  max: 2175
+  reverse: true
+  calibration:
+    min_pulse: 825
+    min_angle: -180     #degree
+    max_pulse: 2175
+    max_angle: 180      #degree
+
+0:  # traction_motor:
+  pololu_id: 12
+  motor_id: 0
+  init: 1500
+  min: 820
+  max: 2175
+  reverse: true
+  calibration:
+    min_pulse: 825
+    min_angle: -180
+    max_pulse: 2175
+    max_angle: 180
+    

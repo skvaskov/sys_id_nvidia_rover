@@ -1,0 +1,8 @@
+prefix=/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/point_grey_ws/install
+
+Name: image_exposure_msgs
+Description: Description of image_exposure_msgs
+Version: 0.13.1
+Cflags: -I/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/point_grey_ws/install/include
+Libs: -L/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/point_grey_ws/install/lib 
+Requires: message_runtime statistics_msgs std_msgs

@@ -1,0 +1,2 @@
+joystick_drivers/joy:joystick_drivers/joystick_drivers:joystick_drivers/ps3joy:joystick_drivers/spacenav_node:joystick_drivers/wiimote
+-DCATKIN_DEVEL_PREFIX=/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/joy_node_ws/devel -DCMAKE_INSTALL_PREFIX=/home/nvidia/Wokspace/umfordavmodelcar_ws/ros_ws/joy_node_ws/install -G Unix Makefiles
